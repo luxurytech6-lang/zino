@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Sign in — Gradeline{% endblock %}
+{% block content %}
+<div class="gl-auth-wrap">
+  <div class="gl-auth-card">
+    <div class="gl-auth-mark">Gradeline</div>
+    <div class="gl-auth-title">Welcome back</div>
+    <div class="gl-auth-sub">Sign in to view your transcript and CGPA forecast.</div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category=='danger' else category }} gl-alert">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="gl-form">
+      <div class="mb-3">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" required autofocus>
+      </div>
+      <div class="mb-4">
+        <label>Password</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+      <button type="submit" class="gl-btn-primary">Sign in</button>
+    </form>
+    <div class="gl-auth-foot">
+      New here? <a href="{{ url_for('auth.register') }}">Create an account</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

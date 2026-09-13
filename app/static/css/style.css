@@ -1,0 +1,341 @@
+/* =========================================================
+   Gradeline — design tokens
+   Palette: ink navy, parchment-cool paper, academic gold, ledger teal
+   Type: Fraunces (display) / Inter (ui) / JetBrains Mono (figures)
+   Signature: dashboard rendered as a printed transcript ledger
+   ========================================================= */
+:root{
+  --ink:        #101b2d;
+  --ink-soft:   #33425c;
+  --paper:      #f3f5f7;
+  --paper-card: #ffffff;
+  --line:       #dde2e8;
+  --gold:       #c9972b;
+  --gold-deep:  #a97c1f;
+  --teal:       #2f7b6b;
+  --teal-soft:  #e6f1ee;
+  --danger:     #b3432f;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-ui: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+*{ box-sizing: border-box; }
+
+body{
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  font-size: 15px;
+}
+
+/* ---------- Nav ---------- */
+.gl-nav{
+  background: var(--ink);
+  padding: .9rem 0;
+  border-bottom: 3px solid var(--gold);
+}
+.gl-brand{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.35rem;
+  color: #fff !important;
+  letter-spacing: .01em;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.gl-brand-mark{
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  background: var(--gold);
+  color: var(--ink);
+  padding: .25rem .45rem;
+  border-radius: 3px;
+  letter-spacing: .05em;
+}
+.gl-user{
+  font-family: var(--font-ui);
+  font-size: .85rem;
+  color: #c3ccdb;
+}
+.gl-btn-outline{
+  border: 1px solid #3a4a68;
+  color: #e7ebf2;
+  background: transparent;
+}
+.gl-btn-outline:hover{
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+.navbar-toggler{ border-color: #3a4a68; }
+
+.gl-main{ padding: 2.5rem 0 4rem; }
+
+.gl-flash-stack{ margin-bottom: 1.5rem; }
+.gl-alert{ border-radius: 6px; border: none; font-size: .9rem; }
+
+/* ---------- Auth pages ---------- */
+.gl-auth-wrap{
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  background-image:
+    radial-gradient(circle at 15% 20%, rgba(201,151,43,.10), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(47,123,107,.14), transparent 45%);
+}
+.gl-auth-card{
+  background: var(--paper-card);
+  width: 100%;
+  max-width: 420px;
+  padding: 2.75rem 2.25rem;
+  border-radius: 10px;
+  box-shadow: 0 30px 60px -20px rgba(0,0,0,.5);
+}
+.gl-auth-mark{
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .12em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-bottom: .35rem;
+}
+.gl-auth-title{
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin-bottom: .25rem;
+}
+.gl-auth-sub{
+  color: var(--ink-soft);
+  font-size: .9rem;
+  margin-bottom: 1.75rem;
+}
+.gl-form label{
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: .3rem;
+}
+.gl-form .form-control{
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: .6rem .8rem;
+  font-size: .95rem;
+}
+.gl-form .form-control:focus{
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px var(--teal-soft);
+}
+.gl-btn-primary{
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: .65rem 1rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  width: 100%;
+}
+.gl-btn-primary:hover{ background: #1c2c47; color: #fff; }
+.gl-auth-foot{
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: .87rem;
+  color: var(--ink-soft);
+}
+.gl-auth-foot a{ color: var(--teal); font-weight: 600; text-decoration: none; }
+
+/* ---------- Dashboard: transcript ledger ---------- */
+.gl-hero{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+.gl-transcript-header{
+  flex: 1 1 320px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 10px;
+  padding: 1.9rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.gl-transcript-header::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 90% 0%, rgba(201,151,43,.18), transparent 55%);
+}
+.gl-eyebrow{
+  font-family: var(--font-mono);
+  font-size: .7rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #9fb0c9;
+  position: relative;
+}
+.gl-cgpa-figure{
+  font-family: var(--font-display);
+  font-size: 4.2rem;
+  font-weight: 600;
+  line-height: 1;
+  margin: .35rem 0 .1rem;
+  position: relative;
+}
+.gl-cgpa-scale{
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  color: #9fb0c9;
+}
+.gl-hero-meta{
+  display: flex;
+  gap: 1.75rem;
+  margin-top: 1.4rem;
+  position: relative;
+}
+.gl-hero-meta div span{ display: block; }
+.gl-hero-meta .num{ font-family: var(--font-mono); font-size: 1.1rem; font-weight: 600; }
+.gl-hero-meta .lbl{ font-size: .72rem; color: #9fb0c9; text-transform: uppercase; letter-spacing: .06em; }
+
+.gl-predict-card{
+  flex: 1 1 280px;
+  background: var(--teal-soft);
+  border: 1px solid #cde3dd;
+  border-radius: 10px;
+  padding: 1.9rem 2rem;
+}
+.gl-predict-card .gl-eyebrow{ color: var(--teal); }
+.gl-predict-figure{
+  font-family: var(--font-display);
+  font-size: 3rem;
+  font-weight: 600;
+  color: var(--teal);
+  margin: .3rem 0 .5rem;
+}
+.gl-predict-note{
+  font-size: .83rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+.gl-predict-empty{
+  font-size: .9rem;
+  color: var(--ink-soft);
+  margin-top: .5rem;
+}
+
+.gl-panel{
+  background: var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1.75rem;
+  margin-bottom: 1.75rem;
+}
+.gl-panel-title{
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.1rem;
+}
+
+/* ledger rows for semesters */
+.gl-ledger-row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .95rem 0;
+  border-bottom: 1px dashed var(--line);
+  text-decoration: none;
+  color: var(--ink);
+}
+.gl-ledger-row:last-child{ border-bottom: none; }
+.gl-ledger-row:hover{ background: #fafbfc; }
+.gl-ledger-name{
+  font-weight: 600;
+  font-size: .95rem;
+}
+.gl-ledger-units{
+  font-family: var(--font-mono);
+  font-size: .78rem;
+  color: var(--ink-soft);
+}
+.gl-ledger-gpa{
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--gold-deep);
+}
+
+.gl-empty-state{
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--ink-soft);
+}
+.gl-empty-state .gl-eyebrow{ color: var(--ink-soft); }
+
+/* add-semester inline form */
+.gl-inline-form{ display: flex; gap: .6rem; }
+.gl-inline-form .form-control{
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.gl-btn-gold{
+  background: var(--gold);
+  border: none;
+  color: var(--ink);
+  font-weight: 600;
+  border-radius: 6px;
+  padding: .5rem 1.1rem;
+  white-space: nowrap;
+}
+.gl-btn-gold:hover{ background: var(--gold-deep); color: #fff; }
+
+/* semester detail: course table */
+.gl-course-table{ width: 100%; border-collapse: collapse; }
+.gl-course-table th{
+  text-align: left;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--ink-soft);
+  padding-bottom: .6rem;
+  border-bottom: 1px solid var(--line);
+}
+.gl-course-table td{
+  padding: .75rem 0;
+  border-bottom: 1px dashed var(--line);
+  font-size: .92rem;
+}
+.gl-grade-pill{
+  font-family: var(--font-mono);
+  font-weight: 700;
+  padding: .15rem .55rem;
+  border-radius: 4px;
+  background: var(--teal-soft);
+  color: var(--teal);
+}
+.gl-back-link{
+  font-size: .85rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-bottom: 1.25rem;
+}
+.gl-back-link:hover{ color: var(--ink); }
+
+.gl-chart-wrap{ position: relative; height: 280px; }
+
+@media (max-width: 576px){
+  .gl-cgpa-figure{ font-size: 3.2rem; }
+  .gl-transcript-header, .gl-predict-card{ padding: 1.5rem; }
+  .gl-inline-form{ flex-direction: column; }
+}

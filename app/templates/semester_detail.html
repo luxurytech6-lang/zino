@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}{{ semester.name }} — Gradeline{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('main.dashboard') }}" class="gl-back-link">&larr; Back to dashboard</a>
+
+<div class="gl-hero">
+  <div class="gl-transcript-header" style="flex: 1 1 100%;">
+    <div class="gl-eyebrow">{{ semester.name }}</div>
+    <div class="gl-cgpa-figure">{{ "%.2f"|format(semester.gpa()) }}<span class="gl-cgpa-scale"> / 5.00</span></div>
+    <div class="gl-hero-meta">
+      <div><span class="num">{{ semester.courses|length }}</span><span class="lbl">Courses</span></div>
+      <div><span class="num">{{ semester.total_units() }}</span><span class="lbl">Total units</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="gl-panel">
+  <div class="gl-panel-title">Courses</div>
+
+  {% if semester.courses %}
+  <table class="gl-course-table">
+    <thead>
+      <tr>
+        <th>Course</th>
+        <th>Units</th>
+        <th>Grade</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in semester.courses %}
+      <tr>
+        <td>{{ c.title }}</td>
+        <td class="gl-ledger-units">{{ c.credit_units }}</td>
+        <td><span class="gl-grade-pill">{{ c.grade }}</span></td>
+        <td class="text-end">
+          <form method="POST" action="{{ url_for('main.delete_course', course_id=c.id) }}" onsubmit="return confirm('Remove this course?');">
+            <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="gl-empty-state">
+    <div class="gl-eyebrow">No courses yet</div>
+    <p class="mt-2 mb-0">Add courses below to calculate this semester's GPA.</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="gl-panel">
+  <div class="gl-panel-title">Add a course</div>
+  <form method="POST" action="{{ url_for('main.add_course', semester_id=semester.id) }}" class="row g-3">
+    <div class="col-md-6">
+      <label class="form-label small text-uppercase fw-bold">Course title</label>
+      <input type="text" name="title" class="form-control" placeholder="e.g. Data Structures" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label small text-uppercase fw-bold">Credit units</label>
+      <input type="number" name="credit_units" class="form-control" min="1" max="12" value="3" required>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label small text-uppercase fw-bold">Grade</label>
+      <select name="grade" class="form-select" required>
+        {% for g in grade_points.keys() %}
+        <option value="{{ g }}">{{ g }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="gl-btn-gold">Add course</button>
+    </div>
+  </form>
+</div>
+
+<div class="gl-panel border-0" style="background:transparent;">
+  <form method="POST" action="{{ url_for('main.delete_semester', semester_id=semester.id) }}" onsubmit="return confirm('Delete this entire semester and all its courses?');">
+    <button type="submit" class="btn btn-outline-danger btn-sm">Delete semester</button>
+  </form>
+</div>
+
+{% endblock %}

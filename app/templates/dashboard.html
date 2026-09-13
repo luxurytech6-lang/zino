@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Gradeline{% endblock %}
+{% block content %}
+
+<div class="gl-hero">
+  <div class="gl-transcript-header">
+    <div class="gl-eyebrow">Cumulative GPA</div>
+    <div class="gl-cgpa-figure">{{ "%.2f"|format(cgpa) }}<span class="gl-cgpa-scale"> / 5.00</span></div>
+    <div class="gl-hero-meta">
+      <div><span class="num">{{ semesters|selectattr('courses')|list|length }}</span><span class="lbl">Semesters logged</span></div>
+      <div><span class="num">{{ total_units }}</span><span class="lbl">Total units</span></div>
+    </div>
+  </div>
+
+  <div class="gl-predict-card">
+    <div class="gl-eyebrow">Predicted next semester</div>
+    {% if prediction.has_prediction %}
+      <div class="gl-predict-figure">{{ "%.2f"|format(prediction.blended_prediction) }}</div>
+      <div class="gl-predict-note">
+        Blend of your recency-weighted average ({{ "%.2f"|format(prediction.recency_weighted) }}) and a linear
+        trend projection ({{ "%.2f"|format(prediction.linear_projection) }}) across your recorded semesters.
+        {% if future_cgpa %}If this holds, your CGPA would move to roughly <strong>{{ "%.2f"|format(future_cgpa) }}</strong>.{% endif %}
+      </div>
+    {% else %}
+      <div class="gl-predict-empty">Add at least one semester with courses to unlock a forecast.</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="gl-panel">
+  <div class="gl-panel-title">GPA trend</div>
+  <div class="gl-chart-wrap">
+    <canvas id="gpaChart"></canvas>
+  </div>
+</div>
+
+<div class="gl-panel">
+  <div class="d-flex justify-content-between align-items-center mb-1">
+    <div class="gl-panel-title mb-0">Semesters</div>
+  </div>
+
+  {% if semesters %}
+    {% for s in semesters %}
+      <a href="{{ url_for('main.semester_detail', semester_id=s.id) }}" class="gl-ledger-row">
+        <div>
+          <div class="gl-ledger-name">{{ s.name }}</div>
+          <div class="gl-ledger-units">{{ s.courses|length }} course{{ 's' if s.courses|length != 1 }} · {{ s.total_units() }} units</div>
+        </div>
+        <div class="gl-ledger-gpa">{{ "%.2f"|format(s.gpa()) if s.courses else "—" }}</div>
+      </a>
+    {% endfor %}
+  {% else %}
+    <div class="gl-empty-state">
+      <div class="gl-eyebrow">No entries yet</div>
+      <p class="mt-2 mb-0">Add your first semester below to begin your transcript.</p>
+    </div>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('main.add_semester') }}" class="gl-inline-form mt-3">
+    <input type="text" name="name" class="form-control" placeholder="e.g. 200 Level – First Semester" required>
+    <button type="submit" class="gl-btn-gold">Add semester</button>
+  </form>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+fetch("{{ url_for('main.chart_data') }}")
+  .then(r => r.json())
+  .then(data => {
+    const ctx = document.getElementById('gpaChart');
+    const labels = [...data.labels];
+    const semGpas = [...data.gpas];
+    const cgpaLine = [...data.cumulative];
+
+    if (data.predicted_next_gpa !== null && data.predicted_next_gpa !== undefined) {
+      labels.push('Predicted');
+      semGpas.push(data.predicted_next_gpa);
+      cgpaLine.push(null);
+    }
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Semester GPA',
+            data: semGpas,
+            borderColor: '#c9972b',
+            backgroundColor: '#c9972b',
+            tension: 0.3,
+            pointRadius: 4,
+            segment: {
+              borderDash: ctx => (data.predicted_next_gpa !== null && ctx.p1DataIndex === labels.length - 1) ? [6,4] : undefined
+            }
+          },
+          {
+            label: 'Cumulative CGPA',
+            data: cgpaLine,
+            borderColor: '#2f7b6b',
+            backgroundColor: '#2f7b6b',
+            tension: 0.3,
+            pointRadius: 3
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { suggestedMin: 0, suggestedMax: 5 } },
+        plugins: { legend: { position: 'bottom' } }
+      }
+    });
+  });
+</script>
+{% endblock %}
